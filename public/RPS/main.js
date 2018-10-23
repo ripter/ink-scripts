@@ -1,5 +1,7 @@
+/**
+ * Load the story from window.storyContent and run it in inkjs
+ */
 (function(storyContent) {
-
     // Create ink story from the content using inkjs
     var story = new inkjs.Story(storyContent);
 
@@ -12,12 +14,12 @@
         for(var i=0; i<story.globalTags.length; i++) {
             var globalTag = story.globalTags[i];
             var splitTag = splitPropertyTag(globalTag);
-            
+
             // THEME: dark
             if( splitTag && splitTag.property == "theme" ) {
                 document.body.classList.add(splitTag.val);
             }
-            
+
             // author: Your Name
             else if( splitTag && splitTag.property == "author" ) {
                 var byline = document.querySelector('.byline');
@@ -38,7 +40,7 @@
 
         var paragraphIndex = 0;
         var delay = 0.0;
-        
+
         // Don't over-scroll past new content
         var previousBottomEdge = firstTime ? 0 : contentBottomEdgeY();
 
@@ -48,7 +50,7 @@
             // Get ink to generate the next paragraph
             var paragraphText = story.Continue();
             var tags = story.currentTags;
-            
+
             // Any special tags included with this line
             var customClasses = [];
             for(var i=0; i<tags.length; i++) {
@@ -78,7 +80,7 @@
                 else if( tag == "CLEAR" || tag == "RESTART" ) {
                     removeAll("p");
                     removeAll("img");
-                    
+
                     // Comment out this line if you want to leave the header visible when clearing
                     setVisible(".header", false);
 
@@ -93,7 +95,7 @@
             var paragraphElement = document.createElement('p');
             paragraphElement.innerHTML = paragraphText;
             storyContainer.appendChild(paragraphElement);
-            
+
             // Add any custom classes derived from ink tags
             for(var i=0; i<customClasses.length; i++)
                 paragraphElement.classList.add(customClasses[i]);
@@ -169,7 +171,7 @@
 
         // Line up top of screen with the bottom of where the previous content ended
         var target = previousBottomEdge;
-        
+
         // Can't go further than the very bottom of the page
         var limit = outerScrollContainer.scrollHeight - outerScrollContainer.clientHeight;
         if( target > limit ) target = limit;
@@ -227,7 +229,7 @@
         var propertySplitIdx = tag.indexOf(":");
         if( propertySplitIdx != null ) {
             var property = tag.substr(0, propertySplitIdx).trim();
-            var val = tag.substr(propertySplitIdx+1).trim(); 
+            var val = tag.substr(propertySplitIdx+1).trim();
             return {
                 property: property,
                 val: val
