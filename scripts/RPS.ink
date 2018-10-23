@@ -7,7 +7,7 @@ Welcome to the Rock Paper Scissors challenge!
 === main_loop ===
 Welcome back! 
   + Play again -> pick_attack
-  * Quit -> DONE
+  * [Quit] Thanks for playing! -> DONE
 
 
 === pick_attack ===
