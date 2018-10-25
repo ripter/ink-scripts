@@ -5,14 +5,14 @@ Welcome to the Rock Paper Scissors challenge!
 -> pick_attack
 
 === main_loop ===
-Welcome back! 
+Welcome back!
   + Play again -> pick_attack
   * [Quit] Thanks for playing! -> DONE
 
 
 === pick_attack ===
 What will you throw?
-+ [Rock] You throw Rock. 
++ [Rock] You throw Rock.
     ~ player_attack = "rock"
 + [Paper] You throw Paper.
     ~ player_attack = "paper"
@@ -23,7 +23,7 @@ What will you throw?
 
 
 === random_attack ===
-{&Chris|Xiaoyan|Rose|Skip|Poe|Jynx|Howard|Banker|Matt} throws <>
+{&Chris|Xiaoyan|Rose|Will|Skip|Poe|Jynx|Howard|Banker|Matt} throws <>
 { shuffle:
   - Rock.
     ~ ai_attack = "rock"
@@ -35,7 +35,7 @@ What will you throw?
 -> result
 
 === result ===
-{ 
+{
   - player_attack == ai_attack:
     You tied!
   - player_attack == "rock" and ai_attack != "paper":

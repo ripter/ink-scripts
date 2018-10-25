@@ -4,11 +4,10 @@ LIST throws = rock, paper, scissors
     -> pick_attack -> random_attack -> top
 
 === pick_attack ===
-    + Throw Rock! -> attack(rock)
-    + Throw Paper! -> attack(paper)
-    + Throw Scissors! -> attack(scissors)
-    - good throw
-    ->->
++ [Throw Rock!] You <> -> attack(rock)
++ [Throw Paper!] You <> -> attack(paper)
++ [Throw Scissors!] You <> -> attack(scissors)
+->->
     
 == attack(type) ==
 {
@@ -22,10 +21,10 @@ LIST throws = rock, paper, scissors
 ->->
 
 == random_attack ===
-AI picks <>
+The AI <>
 { shuffle:
-  - Rock
-  - Paper
-  - Scissors
+  - -> attack(rock)
+  - -> attack(paper)
+  - -> attack(scissors)
 }
 ->->
