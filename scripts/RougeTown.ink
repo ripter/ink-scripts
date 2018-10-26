@@ -1,14 +1,20 @@
+LIST PROP = Stick, Torch
+LIST ENV = Day, Night
+VAR aspects = (ENV.Night)
 VAR inventory = ()
-LIST prop = stick, torch
+
+// Init is good to setup first time game stuff
+- (init)
+  -> top
+
 
 - (top)
-You are sitting near a campfire.
-It is dark out.
+<- campfire.enter
 There is a cave to the south.
 There is a forest to the north.
-+ {inventory ? prop.stick} Craft the Stick into a Torch
-    ~ inventory -= prop.stick
-    ~ inventory += prop.torch
++ {inventory ? PROP.Stick} Craft the Stick into a Torch
+    ~ inventory -= PROP.Stick
+    ~ inventory += PROP.Torch
     -> player.display_inventory ->
     -> top
 + [Forest] -> forest.enter
@@ -18,11 +24,20 @@ There is a forest to the north.
     -> top
 
 
+== campfire ==
+= enter
+    {aspects ? ENV.Night: It is dark out}
+    {aspects ? ENV.Day: The sun is out, the campfire seems unnecessary but welcome.}
+    
+    - You are sitting next to a campfire.
+      -> environment.advanceTime ->
+    -> DONE
+
 == cave ==
 = enter
     You enter the cave,
     {
-      - inventory ? prop.torch:
+      - inventory ? PROP.Torch:
         The cave walls flicker in the torch light.
       - else:
         <> but is too dark to see. You walk back to the campfire.
@@ -37,7 +52,7 @@ There is a forest to the north.
     -> search
 = search
     After bumbling around, you manage to find a stick.
-    ~ inventory += prop.stick
+    ~ inventory += PROP.Stick
     -> player.display_inventory ->
     -> top
     
@@ -45,3 +60,15 @@ There is a forest to the north.
 = display_inventory
     You have: {inventory}
     ->->
+    
+== environment ==
+= advanceTime
+{
+  - aspects ? ENV.Night:
+    ~ aspects -= ENV.Night
+    ~ aspects += ENV.Day
+  - aspects ? ENV.Day:
+    ~ aspects += ENV.Night
+    ~ aspects -= ENV.Day
+}
+->->
