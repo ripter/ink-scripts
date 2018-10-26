@@ -5,8 +5,7 @@ LIST throws = rock, paper, scissors
     Let's play Rock, Paper, or Scissors.
     -> pick_attack ->
     -> random_attack ->
-    Player Attack was {player_attack}
-    AI Attack was {ai_attack}
+    -> match_results ->
     -> top
 
 
@@ -27,7 +26,26 @@ LIST throws = rock, paper, scissors
 ->->
 
 == match_results ==
-TODO Show the result
+{
+  - player_attack == ai_attack:
+  Tie!
+  - player_attack == rock and ai_attack != paper:
+  Rock smashes everything, You Win!
+  - player_attack == rock and ai_attack == paper:
+  Paper wraps around the Rock, makeing it, less of a rock or something.
+  You Lose.
+  - player_attack == paper and ai_attack != scissors:
+  Paper wraps and binds, You Win!
+  - player_attack == paper and ai_attack == scissors:
+  Scissors shred the Paper into tiny pieces.
+  You Lose.
+  - player_attack == scissors and ai_attack != rock:
+  Scissors cut and shred everything in their path, You Win!
+  - player_attack == scissors and ai_attack == rock:
+  Rock smashes scissors into scrap metal.
+  You Lose.
+}
+->->
 
     
 == attack(type, ref attacker) ==
