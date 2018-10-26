@@ -1,0 +1,22 @@
+{
+  "name": "ink-scripts",
+  "version": "1.0.0",
+  "description": "learning how to write Ink stories",
+  "main": "make",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ripter/ink-scripts.git"
+  },
+  "author": "Chris Richards",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ripter/ink-scripts/issues"
+  },
+  "homepage": "https://github.com/ripter/ink-scripts#readme",
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  }
+}

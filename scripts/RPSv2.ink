@@ -3,27 +3,36 @@ VAR player_attack = ()
 VAR ai_attack = ()
 LIST throws = rock, paper, scissors
 
+- (start)
 Let's play Rock, Paper, or Scissors.
 Each game costs $1
 
 - (top)
+{
+  - fame > 0:
     You have ${fame}.
     -> pick_attack ->
     -> random_attack ->
     -> match_results ->
     -> top
+  - fame <= 0:
+    You had a good run, and a lot of people made money. You where not one of those people.
+    -> gameover
+}
+    
 
 
 === pick_attack ===
 + [Throw Rock!] You <> -> attack(rock, player_attack)
 + [Throw Paper!] You <> -> attack(paper, player_attack)
 + [Throw Scissors!] You <> -> attack(scissors, player_attack)
-+ Quit with ${fame} -> DONE
++ [Quit with ${fame}] 
+    -> gameover
 
 
 
 == random_attack ===
-{&Chris|Xiaoyan|Rose|Will|Skip|Poe|Jynx|Howard|Banker|Matt} <>
+{~Chris|Xiaoyan|Rose|Will|Skip|Poe|Jynx|Howard|Banker|Matt} <>
 { shuffle:
   - -> attack(rock, ai_attack)
   - -> attack(paper, ai_attack)
@@ -59,6 +68,15 @@ Each game costs $1
 }
 ->->
 
+== gameover ==
+~ temp total_turns = TURNS_SINCE(-> start)
+You lasted {total_turns} rounds.
+You walked away with ${fame}.
+{ fame > 0: 
+    You averaged ${total_turns/fame} per round.
+}
+-> DONE
+
 == player_win ==
 ~ fame++
 ->->
@@ -67,6 +85,7 @@ Each game costs $1
 ~ fame--
 ->->
     
+
 == attack(type, ref attacker) ==
 {
   - type ? rock:
