@@ -1,6 +1,6 @@
 LIST PROP = Stick, Torch
 LIST ENV = Day, Night
-VAR aspects = (ENV.Night)
+VAR aspects = (ENV.Day) // It will be Night when the player starts
 VAR inventory = ()
 
 // Init is good to setup first time game stuff
@@ -26,11 +26,11 @@ There is a forest to the north.
 
 == campfire ==
 = enter
+    -> environment.advanceTime ->
     {aspects ? ENV.Night: It is dark out}
     {aspects ? ENV.Day: The sun is out, the campfire seems unnecessary but welcome.}
     
     - You are sitting next to a campfire.
-      -> environment.advanceTime ->
     -> DONE
 
 == cave ==
@@ -48,8 +48,14 @@ There is a forest to the north.
 
 == forest ==
 = enter
-    You enter the forest, it is dark.
-    -> search
+    You enter the forest. 
+    { 
+      - aspects ? ENV.Night: At night you have trouble and trip over something.
+      - else: A thick line of trees make it hard to travel into the forest.
+    }
+    + Search the area -> search
+    + Go back to the Campfire -> campfire.enter
+
 = search
     After bumbling around, you manage to find a stick.
     ~ inventory += PROP.Stick
@@ -58,6 +64,14 @@ There is a forest to the north.
     
 == player ==
 = display_inventory
+  ~ temp total_items = LIST_COUNT(inventory)
+  {  total_items == 0:
+      You don't have any items.
+      (Does that mean you are naked?)
+    - else:
+      You have {total_items} items.
+      [{inventory}]
+  }
     You have: {inventory}
     ->->
     
