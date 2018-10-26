@@ -1,8 +1,13 @@
+VAR fame = 1
 VAR player_attack = ()
 VAR ai_attack = ()
 LIST throws = rock, paper, scissors
+
+Let's play Rock, Paper, or Scissors.
+Each game costs $1
+
 - (top)
-    Let's play Rock, Paper, or Scissors.
+    You have ${fame}.
     -> pick_attack ->
     -> random_attack ->
     -> match_results ->
@@ -13,7 +18,8 @@ LIST throws = rock, paper, scissors
 + [Throw Rock!] You <> -> attack(rock, player_attack)
 + [Throw Paper!] You <> -> attack(paper, player_attack)
 + [Throw Scissors!] You <> -> attack(scissors, player_attack)
-->->
++ Quit with ${fame} -> DONE
+
 
 
 == random_attack ===
@@ -28,25 +34,38 @@ LIST throws = rock, paper, scissors
 == match_results ==
 {
   - player_attack == ai_attack:
-  Tie!
+    Tie!
   - player_attack == rock and ai_attack != paper:
-  Rock smashes everything, You Win!
+    Rock smashes everything, You Win!
+    -> player_win
   - player_attack == rock and ai_attack == paper:
-  Paper wraps around the Rock, makeing it, less of a rock or something.
-  You Lose.
+    Paper wraps around the Rock, makeing it, less of a rock or something.
+    You Lose.
+    -> player_lose
   - player_attack == paper and ai_attack != scissors:
-  Paper wraps and binds, You Win!
+    Paper wraps and binds, You Win!
+    -> player_win
   - player_attack == paper and ai_attack == scissors:
-  Scissors shred the Paper into tiny pieces.
-  You Lose.
+    Scissors shred the Paper into tiny pieces.
+    You Lose.
+    -> player_lose
   - player_attack == scissors and ai_attack != rock:
-  Scissors cut and shred everything in their path, You Win!
+    Scissors cut and shred everything in their path, You Win!
+    -> player_win
   - player_attack == scissors and ai_attack == rock:
-  Rock smashes scissors into scrap metal.
-  You Lose.
+    Rock smashes scissors into scrap metal.
+    You Lose.
+    -> player_lose
 }
 ->->
 
+== player_win ==
+~ fame++
+->->
+
+== player_lose ==
+~ fame--
+->->
     
 == attack(type, ref attacker) ==
 {
