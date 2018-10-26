@@ -1,5 +1,5 @@
-VAR player_attack = ""
-VAR ai_attack = ""
+VAR player_attack = ()
+VAR ai_attack = ()
 LIST throws = rock, paper, scissors
 - (top)
     Let's play Rock, Paper, or Scissors.
