@@ -1,4 +1,5 @@
 LIST PROP = Stick, Torch, Campfire
+LIST AFFECT = None, Hallucinating
 LIST ENV = Day, Night
 VAR aspects = (ENV.Day) // It will be Night when the player starts
 VAR inventory = ()
@@ -9,12 +10,12 @@ VAR hunger = 0
 - (init)
   You wake up next to a roaring campire in a small forest clearing.
   ~ aspects += PROP.Campfire
-  Your head is pounding and your stomach twists with thirst.
   ~ thirst = 10
   ~ hunger = 10
   -> home_base
 
 - (home_base)
+  -> player.health ->
   + Wait around the campfire
     -> environment.advanceTime -> home_base
   + Search the forest
@@ -89,7 +90,19 @@ There is a forest to the north.
   }
   You have: {inventory}
   ->->
-    
+
+= health
+  {
+    - thirst < 10:
+      You are starting to hallucinate from dehydration.
+      ~ aspects += Hallucinating
+    - thirst < 15 and hunger < 15:
+      Your stomach twists in pain from thirst and hunger.
+    - else:
+      You are hungry
+  }
+  ->->
+  
 == environment ==
 = advanceTime
   ~ thirst--
