@@ -1,14 +1,29 @@
-LIST PROP = Stick, Torch
+LIST PROP = Stick, Torch, Campfire
 LIST ENV = Day, Night
 VAR aspects = (ENV.Day) // It will be Night when the player starts
 VAR inventory = ()
+VAR thirst = 0
+VAR hunger = 0
 
 // Init is good to setup first time game stuff
 - (init)
-  -> top
+  You wake up next to a roaring campire in a small forest clearing.
+  ~ aspects += PROP.Campfire
+  Your head is pounding and your stomach twists with thirst.
+  ~ thirst = 10
+  ~ hunger = 10
+  -> home_base
 
+- (home_base)
+  + Wait around the campfire
+    -> environment.advanceTime -> home_base
+  + Search the forest
+  -> DONE
+  
 
 - (top)
+  { has_light(): You have some light }
+  { not has_light(): You do not have light }
 <- campfire.enter
 There is a cave to the south.
 There is a forest to the north.
@@ -72,17 +87,33 @@ There is a forest to the north.
       You have {total_items} items.
       [{inventory}]
   }
-    You have: {inventory}
-    ->->
+  You have: {inventory}
+  ->->
     
 == environment ==
 = advanceTime
-{
-  - aspects ? ENV.Night:
-    ~ aspects -= ENV.Night
-    ~ aspects += ENV.Day
+  ~ thirst--
+  ~ hunger--
+  As time passes <>
+  {
+    - aspects ? ENV.Night:
+      the sun rises.
+      ~ aspects -= ENV.Night
+      ~ aspects += ENV.Day
+    - aspects ? ENV.Day:
+      the sun sets.
+      ~ aspects += ENV.Night
+      ~ aspects -= ENV.Day
+  }
+  ->->
+
+
+== function has_light()
+{ 
+  - inventory ? PROP.Torch: 
+    ~ return true
   - aspects ? ENV.Day:
-    ~ aspects += ENV.Night
-    ~ aspects -= ENV.Day
+    ~ return true
+  - else:
+    ~ return false
 }
-->->
