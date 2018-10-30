@@ -1,13 +1,17 @@
+LIST directions = NORTH, EAST, SOUTH, WEST, BACK
+
 - (top)
   You must cross the forset with your flock of sheep.
   Don't let any of your sheep die!
-  + Head North -> north1
+  ~ temp mychoice = ()
+  <- list_directions(NORTH)
+  + Blah Head North -> north1
   
 == north1
   You travel deeper into the woods.
   The sheep wonder on the path, bleeting occsonally.
-  + Continue North -> north2
-  + Go back -> top
+  <- list_directions((NORTH, BACK))
+  + Double Blah Head North -> north2
   
 == north2
   You reach a small clearing. The trees look fresly cut.
@@ -33,3 +37,10 @@
   You arrive at the docks.
   Congratulations!
   -> DONE
+  
+== list_directions(available_directions)
+  There are {available_directions} directions
+  + {available_directions ? NORTH} You can go North!
+    -> DONE
+  + {available_directions ? BACK} You can go back!
+    -> DONE
