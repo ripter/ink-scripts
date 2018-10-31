@@ -19,14 +19,14 @@ Each game costs $1
     You had a good run, and a lot of people made money. You where not one of those people.
     -> gameover
 }
-    
+
 
 
 === pick_attack ===
 + [Throw Rock!] You <> -> attack(rock, player_attack)
 + [Throw Paper!] You <> -> attack(paper, player_attack)
 + [Throw Scissors!] You <> -> attack(scissors, player_attack)
-+ [Quit with ${fame}] 
++ [Quit with ${fame}]
     -> gameover
 
 
@@ -72,7 +72,7 @@ Each game costs $1
 ~ temp total_turns = TURNS_SINCE(-> start)
 You lasted {total_turns} rounds.
 You walked away with ${fame}.
-{ fame > 0: 
+{ fame > 0:
     You averaged ${total_turns/fame} per round.
 }
 -> DONE
@@ -84,7 +84,7 @@ You walked away with ${fame}.
 == player_lose ==
 ~ fame--
 ->->
-    
+
 
 == attack(type, ref attacker) ==
 {
@@ -97,6 +97,6 @@ You walked away with ${fame}.
   - type ? scissors:
     threw Scissors!
     ~ attacker = scissors
-    
+
 }
 ->->
