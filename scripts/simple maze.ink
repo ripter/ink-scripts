@@ -7,14 +7,18 @@ VAR dead_sheep = 0
   + [Head out with the sheep] -> north1
   
 == north1
-  The trees quickly thicken into a dense forest. You lead the sheep down the dirt path. The thick trees making it easy to keep the {living_sheep} sheep on the path.
-  + [Continue down the path] -> north2
-  + [Take the shortcut down the hill to the shore] -> east_shortcut
-  <- go_back(->homestead)
+  As you leave the farm, you get an amazing view of the city below. You can see ships moving slowly in the bay. 
+  When you are by yourself, sometimes instead of walking all the way around to the city, you just walk down the side of the hill. It is a steep hill. You can't quite remember if it was sheep or goats that are great climbers.
+  + [Take the path into the city] -> north2
+  + [Lead the sheep down the side of the hill] -> east_shortcut
+  
   
 == north2
+  After a half an hour of walking, the path reaches the cobble stone road that leads into town.
+  The sheep are bleeting loudly to rest.
   You reach the Northern Path Crossroads. A cobble stone road heads East and West.
   + Head East -> east1
+  + Head West -> DONE
   <- go_back(->north1)
   
 == east1
@@ -47,12 +51,31 @@ VAR dead_sheep = 0
     -> DONE
   
 == east_shortcut
-  The forest abrubtly ends into a steep down hill. The sheep start to fan out as they playfully jump down the steep slope.
-  ~ living_sheep -= 2
-  ~ dead_sheep += 2
+  The slope doesn't seem to be that steep as you start down the hill. Some of the sheep are reluctant to follow you.
+  + [Keep moving, they will follow] As you keep moving, the hill drops off sharply. You and your sheep tumble the rest of the way down.
+    <- lose_sheep("{~1|2|3}")
+  + [Stop and gather the sheep] You try to gather all the sheep. It is hard to keep track with the sharp slope.
+    <- lose_sheep("{~0|1|2}")
+  - 
   When you reach the bottom, you count {living_sheep} sheep still with you.
   + [Make your way to the docks] -> docks
 
 
+
 == go_back(-> to)
   + [Go Back] -> to
+  ->->
+  
+== lose_sheep(lost)
+  ~ temp dead = 0
+  {
+    - lost == 1:
+      ~ dead = 1
+    - lost == 2:
+      ~ dead = 2
+    - lost == 3:
+      ~ dead = 3
+  }
+  ~ living_sheep -= dead
+  ~ dead_sheep += dead
+  -> DONE
