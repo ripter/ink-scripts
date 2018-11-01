@@ -20,13 +20,13 @@ LIST inventory = pastry, cheese
 
 == north2
   An hour and half later you reach the cobble stone road that leads into the city. There is a large patch of grass next to the road.
-  The sheep are bleeting loudly and trying to pull you to the grass.
+  The sheep are bleating loudly and trying to pull you to the grass.
   + [Continue to the city] -> east1
   + [Let the sheep graze in the grass] -> graze_sheep
   <- go_back(->north1)
 
 == east1
-  The cobble stone road turns into paved road and the number of horses and carrages greatly increase as you walk twords the city gates.
+  The cobble stone road turns into paved road and the number of horses and carriages greatly increase as you walk towards the city gates.
   As you approach, an elder woman calls to you, pointing at your sheep.
   + [Head into the city.]
     -> east2
@@ -35,7 +35,7 @@ LIST inventory = pastry, cheese
   <- go_back(-> north2)
 
 == east2
-  As you pass though the market, the smell of fresh bread covered in fried butter and suger fills your senses.
+  As you pass though the market, the smell of fresh bread covered in fried butter and sugar fills your senses.
   - (market)
   * {cash >= 1} [Buy a butter pastry.]
     You buy a pastry for $1 and add it to your bag.
@@ -62,7 +62,7 @@ LIST inventory = pastry, cheese
 
 == docks
   ~ temp payment = living_sheep
-  As soon as you enter the Docks the Captian comes out to greet you.
+  As soon as you enter the Docks the Captain comes out to greet you.
     "Ah, thanks for the delivery."
   {
     - dead_sheep == 0:
@@ -79,9 +79,9 @@ LIST inventory = pastry, cheese
 == east_shortcut
   About half way down the hill, several of the sheep refuse to continue moving. You could just yank on the leash, forcing them down. Or you could let the leashes go; letting the sheep make it down at their own pace.
   + [Yank on the leashes, pulling the sheep along.]
-    The sheep resist your pulling, after a good yank the sheep stop resting, causing you to lose your balance. You tumble down the hill, yaking the sheel along with you.
+    The sheep resist your pulling, after a good yank the sheep stop resting, causing you to lose your balance. You tumble down the hill, yanking the sheep along with you.
     <- lose_sheep("{~1|2|2|2|3|3}")
-  + [Let go of the leashes and heard the sheep down the hill.] As soon as you let go, the sheep bolt in all directions. After twenty minutes chashing them around the hill, you manage to reach the bottom.
+  + [Let go of the leashes and heard the sheep down the hill.] As soon as you let go, the sheep bolt in all directions. After twenty minutes chasing them around the hill, you manage to reach the bottom.
     <- lose_sheep("{~0|1|1|1|2}")
 
   - When you reach the bottom, you count {living_sheep} sheep still with you.
@@ -90,9 +90,9 @@ LIST inventory = pastry, cheese
 
 == graze_sheep
   You let the sheep off the leashes and they spread out to eat grass.
-  After some time, you hear a commotion and what looks like a group of men on horseback comming from the city. They are riding very fast and yelling a lot. You can't make out any of the words.
-  + [Wait for the travlers to pass]
-    As the travlers aproach, they take a look at you and your sheep. They smile wide and shoot a few arrows at your sheep as they pass. The City Guard quick on their tail.
+  After some time, you hear a commotion and what looks like a group of men on horseback coming from the city. They are riding very fast and yelling a lot. You can't make out any of the words.
+  + [Wait for the travelers to pass]
+    As the travelers approach, they take a look at you and your sheep. They smile wide and shoot a few arrows at your sheep as they pass. The City Guard quick on their tail.
     <- lose_sheep("{~1|2|2|3|3}")
   + [Hide in the bushes while the travelers pass.]
     As the riders near, you can see the City Guard chasing them. Arrows flying back and forth wildly.
@@ -107,7 +107,7 @@ LIST inventory = pastry, cheese
   + [Wave the woman away and continue into the city.]
     -> east2
   + [Sell some sheep to the old woman.]
-    You've been in this bussiness long enough that you no longer need words. She wants to buy some sheep.
+    You've been in this business long enough that you no longer need words. She wants to buy some sheep.
     ~ temp dead = dead_sheep
     <- lose_sheep("{~1|1|2|2|1}")
     ~ temp diff = dead_sheep - dead
@@ -119,18 +119,19 @@ LIST inventory = pastry, cheese
 
 == need_permit
   A city guard steps out in front of you; In the corner of your eye, can see more men moving in the shadows.
-  "Do you have a permit to transfer all this lifestock into the city?
+  "Do you have a permit to transfer all this livestock into the city?
   * ["What are you talking about? There is no permit."]
     Several men jump you, punching and kicking until you are laying on the ground.
       ~ cash = 0
-      <- lose_sheep("{~0|0|1|2|2|2}")
+      <- lose_sheep("{~0|0|0|1|1|1}")
       After several agonizing minutes, you are able to get back up. You still have {living_sheep} sheep left. But the thugs took all of your money.
       You limp your way to the docks.
   * {inventory ? cheese} [I think I left my permit in this cheese slice.]
     The man looks at you for a moment, then at the cheese. In the blink of an eye the cheese is gone.
     "Have a good day sir" The man says as he steps aside.
-    You and your sheep make haste to the docks.
-  -
+  * {inventory ? pastry} [Hold out the pastry, here you go officer.]
+    The man grunts. "This is barely enough." We will let you pass this time.
+  - You and your sheep make haste to the docks.
   -> docks
 
 
@@ -142,7 +143,7 @@ LIST inventory = pastry, cheese
     - cash <= 10:
       You father pats you on the back. "${cash} isn't to bad, if we can figure out a way to cut some corners, we might yet make this deal work."
     - cash > 10:
-      You father stares blankly at the money on the table. "Amazing, just amzing. Clearly I've underestamated you son." He gives you a big hug. With ${cash} we can finally aford your sisters surgery.
+      You father stares blankly at the money on the table. "Amazing, just amazing. Clearly I've underestimated you son." He gives you a big hug. With ${cash} we can finally afford your sisters surgery.
   }
   -> DONE
 
