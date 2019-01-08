@@ -5263,9 +5263,11 @@
   }
 
   var Story = function (_InkObject) {
+    console.log('creating a Story "class"', _InkObject);
   	inherits(Story, _InkObject);
 
   	function Story(jsonString, lists) {
+      console.log('new Story', arguments);
   		classCallCheck(this, Story);
 
   		var _this = possibleConstructorReturn(this, (Story.__proto__ || Object.getPrototypeOf(Story)).call(this));
@@ -5294,19 +5296,20 @@
   		} else {
   			//the original version only accepts a string as a constructor, but this is javascript and it's almost easier to get a JSON value than a string, so we're silently accepting both
   			var rootObject = typeof jsonString === 'string' ? JSON.parse(jsonString) : jsonString;
+        console.log('Start of processing json file', rootObject);
 
-  			var versionObj = rootObject["inkVersion"];
-  			if (versionObj == null) throw "ink version number not found. Are you sure it's a valid .ink.json file?";
-
-  			var formatFromFile = parseInt(versionObj);
-  			if (formatFromFile > _this.inkVersionCurrent) {
-  				throw "Version of ink used to build story was newer than the current version of the engine";
-  			} else if (formatFromFile < _this.inkVersionMinimumCompatible) {
-  				throw "Version of ink used to build story is too old to be loaded by this version of the engine";
-  			} else if (formatFromFile != _this.inkVersionCurrent) {
-  				console.warn("WARNING: Version of ink used to build story doesn't match current version of engine. Non-critical, but recommend synchronising.");
-  			}
-
+  			// var versionObj = rootObject["inkVersion"];
+  			// if (versionObj == null) throw "ink version number not found. Are you sure it's a valid .ink.json file?";
+        //
+  			// var formatFromFile = parseInt(versionObj);
+  			// if (formatFromFile > _this.inkVersionCurrent) {
+  			// 	throw "Version of ink used to build story was newer than the current version of the engine";
+  			// } else if (formatFromFile < _this.inkVersionMinimumCompatible) {
+  			// 	throw "Version of ink used to build story is too old to be loaded by this version of the engine";
+  			// } else if (formatFromFile != _this.inkVersionCurrent) {
+  			// 	console.warn("WARNING: Version of ink used to build story doesn't match current version of engine. Non-critical, but recommend synchronising.");
+  			// }
+        //
   			var rootToken = rootObject["root"];
   			if (rootToken == null) throw "Root node for ink not found. Are you sure it's a valid .ink.json file?";
 
