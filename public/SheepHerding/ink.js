@@ -3094,6 +3094,7 @@
   	}, {
   		key: 'JArrayToRuntimeObjList',
   		value: function JArrayToRuntimeObjList(jArray, skipLast) {
+        // console.log('JArrayToRuntimeObjList', jArray, skipLast);
   			var count = jArray.length;
   			if (skipLast) count--;
 
@@ -3150,11 +3151,17 @@
   			return jObj;
   		}
   	}, {
+      //
+      //NOTE: This is the main transform function, reading one deeply nested object at a time.
+      //
   		key: 'JTokenToRuntimeObject',
   		value: function JTokenToRuntimeObject(token) {
+        // console.log('JTokenToRuntimeObject', token);
+        //NOTE: this todo shows the lack of understanding about JS. They are using isNaN is a way different than documented. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/isNaN
   			//@TODO probably find a more robust way to detect numbers, isNaN seems happy to accept things that really aren't numberish.
   			if (!isNaN(token) && token !== "\n") {
   				//JS thinks "\n" is a number
+          //NOTE: that is false, they do not understand what isNaN does
   				return Value.Create(token);
   			}
 
@@ -3163,7 +3170,13 @@
 
   				// String value
   				var firstChar = str[0];
-  				if (firstChar == '^') return new StringValue(str.substring(1));else if (firstChar == "\n" && str.length == 1) return new StringValue("\n");
+          //NOTE: I'm not sure why, but all the text has ^ in front and this code just removes it.
+  				if (firstChar == '^') {
+            return new StringValue(str.substring(1));
+          }
+          else if (firstChar == "\n" && str.length == 1) {
+            return new StringValue("\n");
+          }
 
   				// Glue
   				if (str == "<>") return new Glue();
@@ -3515,6 +3528,7 @@
   	}, {
   		key: 'JArrayToContainer',
   		value: function JArrayToContainer(jArray) {
+        // console.log('JArrayToContainer', jArray);
   			var container = new Container();
   			container.content = this.JArrayToRuntimeObjList(jArray, true);
 
@@ -3614,11 +3628,15 @@
   	}, {
   		key: 'JTokenToListDefinitions',
   		value: function JTokenToListDefinitions(obj) {
+        // console.log('JTokenToListDefinitions', obj);
   			//		var defsObj = (Dictionary<string, object>)obj;
   			var defsObj = obj;
 
   			var allDefs = [];
 
+        //
+        //NOTE: all of this is just a way to safely copy the obj and force the item values to be a number.
+        //
   			for (var key in defsObj) {
   				var name = key.toString();
   				//			var listDefJson = (Dictionary<string, object>)kv.Value;
@@ -3632,10 +3650,12 @@
   					items[nameValueKey] = parseInt(nameValue);
   				}
 
+          //NOTE: This just adds a bunch of junk to the `def` object which is a copy of `obj`
   				var def = new ListDefinition(name, items);
   				allDefs.push(def);
   			}
 
+        //NOTE: this also adds a bunch of stuff around the data. A lot of copies of the same information.
   			return new ListDefinitionsOrigin(allDefs);
   		}
   	}]);
@@ -4378,8 +4398,12 @@
   	return PRNG;
   }();
 
+  //
+  //NOTE: State
+  //
   var StoryState = function () {
   	function StoryState(story) {
+      console.log('new StoryState', story);
   		classCallCheck(this, StoryState);
 
   		//actual constructor
@@ -4458,7 +4482,10 @@
   		value: function ResetOutput(objs) {
   			objs = typeof objs !== 'undefined' ? objs : null;
   			this._outputStream.length = 0;
-  			if (objs != null) this._outputStream.push.apply(this._outputStream, objs);
+  			if (objs != null) {
+          console.log('_outputStream push', objs);
+          this._outputStream.push.apply(this._outputStream, objs);
+        }
   			this.OutputStreamDirty();
   		}
   	}, {
@@ -4660,6 +4687,7 @@
   			}
 
   			if (includeInOutput) {
+          console.log('_outputStream push', obj);
   				this._outputStream.push(obj);
   				this.OutputStreamDirty();
   			}
@@ -4690,6 +4718,7 @@
   					//				var text = _outputStream [i] as StringValue;
   					var text = this._outputStream[i];
   					if (text instanceof StringValue) {
+              console.log('_outputStream.splice', i, 1);
   						this._outputStream.splice(i, 1);
   					} else {
   						i++;
@@ -4705,6 +4734,7 @@
   			for (var i = this._outputStream.length - 1; i >= 0; i--) {
   				var c = this._outputStream[i];
   				if (c instanceof Glue) {
+            console.log('_outputStream.splice', i, 1);
   					this._outputStream.splice(i, 1);
   				} else if (c instanceof ControlCommand) {
   					// e.g. BeginString
@@ -4747,6 +4777,7 @@
   				if (cmd) break;
 
   				if (txt.isNewline || txt.isInlineWhitespace) {
+            console.log('_outputStream.splice', i, 1);
   					this._outputStream.splice(i, 1);
   					this.OutputStreamDirty();
   				} else {
@@ -4990,6 +5021,9 @@
   			this.callStack.currentElement.currentObject = value;
   		}
   	}, {
+      //
+      //NOTE: True def of canContinue
+      //
   		key: 'canContinue',
   		get: function get$$1() {
   			return !this.currentPointer.isNull && !this.hasError;
@@ -5060,6 +5094,7 @@
   		key: 'currentText',
   		get: function get$$1() {
   			if (this._outputStreamTextDirty) {
+          console.log('cleaning up stream');
   				var sb = new StringBuilder();
 
   				this._outputStream.forEach(function (outputObj) {
@@ -5074,6 +5109,7 @@
   				this._outputStreamTextDirty = false;
   			}
 
+        console.log(`get currentText: "${this._currentText}"`);
   			return this._currentText;
   		}
   	}, {
@@ -5262,6 +5298,9 @@
   	};
   }
 
+  //
+  //NOTE: Main Story API
+  //
   var Story = function (_InkObject) {
     console.log('creating a Story "class"', _InkObject);
   	inherits(Story, _InkObject);
@@ -5315,6 +5354,7 @@
 
   			var listDefsObj;
   			if (listDefsObj = rootObject["listDefs"]) {
+          //NOTE: This just wraps the listDefsObj with a bunch of meta data and structure
   				_this._listDefinitions = JsonSerialisation.JTokenToListDefinitions(listDefsObj);
   			}
 
@@ -5404,6 +5444,7 @@
   	}, {
   		key: 'ContinueInternal',
   		value: function ContinueInternal(millisecsLimitAsync) {
+        console.log('ContinueInternal');
   			millisecsLimitAsync = typeof millisecsLimitAsync !== 'undefined' ? millisecsLimitAsync : 0;
 
   			if (this._profiler != null) this._profiler.PreContinue();
@@ -5492,7 +5533,7 @@
   				if (this._stateAtLastNewline != null) {
 
   					var change = this.CalculateNewlineOutputStateChange(this._stateAtLastNewline.currentText, this.state.currentText, this._stateAtLastNewline.currentTags.length, this.state.currentTags.length);
-
+            console.log('ContinueSingleStep','change', change);
   					if (change == OutputStateChange.ExtendedBeyondNewline) {
 
   						this.RestoreStateSnapshot(this._stateAtLastNewline);
@@ -5599,7 +5640,7 @@
   	}, {
   		key: 'Step',
   		value: function Step() {
-
+        // console.log('%cStep', 'font-size: .5em', this);
   			var shouldAddToStream = true;
 
   			// Get current content
@@ -6979,6 +7020,7 @@
   			}
   		}
   	}, {
+      //NOTE: just a wrapper
   		key: 'canContinue',
   		get: function get$$1() {
   			return this.state.canContinue;
